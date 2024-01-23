@@ -2,6 +2,7 @@ import { useState } from "react";
 import { flushSync } from "react-dom";
 import {
   Button,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,7 +21,7 @@ export default function App() {
   function addGoalHandler() {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      enteredGoalText,
+      {text: enteredGoalText, key: Math.random().toString()},
     ]);
   }
 
@@ -35,13 +36,18 @@ export default function App() {
         <Button title="Add goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView alwaysBounceVertical={false}>
-          {courseGoals.map((goal) => (
-            <View key={goal} style={styles.goalItem}>
-              <Text style={styles.goalText}>{goal}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemData) => {
+            
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+          alwaysBounceVertical={false}
+        />
       </View>
     </View>
   );
